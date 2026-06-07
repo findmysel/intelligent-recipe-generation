@@ -1,0 +1,116 @@
+<!--pages/search/search.wxml - 食材搜索页-->
+<scroll-view class="scrollarea" scroll-y enhanced show-scrollbar="{{false}}">
+  <view class="container">
+    <!-- 已选食材展示 -->
+    <view class="selected-bar" wx:if="{{selectedIngredients.length > 0 || selectedMethod}}">
+      <view class="selected-label">已选：</view>
+      <view class="selected-tags">
+        <view class="selected-tag" wx:for="{{selectedIngredients}}" wx:key="*this">
+          {{item}} ✕
+        </view>
+        <view class="selected-tag method-tag" wx:if="{{selectedMethod}}">
+          {{selectedMethod}} ✕
+        </view>
+      </view>
+      <view class="clear-btn" bindtap="onClear">清空</view>
+    </view>
+
+    <!-- 食材分类Tab -->
+    <view class="tab-header">
+      <view
+        wx:for="{{tabs}}"
+        wx:key="index"
+        class="tab-item {{currentTab === index ? 'tab-active' : ''}}"
+        data-index="{{index}}"
+        bindtap="onTabChange"
+      >{{item}}</view>
+    </view>
+
+    <!-- 素食 -->
+    <view class="ingredient-section" wx:if="{{currentTab === 0}}">
+      <view class="card">
+        <view class="card-title">选择素食食材<text class="card-hint">（可多选）</text></view>
+        <view class="ingredient-grid">
+          <view
+            wx:for="{{vegetables}}"
+            wx:key="id"
+            class="ingredient-item"
+            data-name="{{item.name}}"
+            bindtap="onIngredientTap"
+          >
+            <view class="ingredient-emoji {{selectedMap[item.name] ? 'ingredient-emoji-active' : ''}}">
+              {{item.emoji}}
+            </view>
+            <text class="ingredient-name {{selectedMap[item.name] ? 'ingredient-name-active' : ''}}">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 肉食 -->
+    <view class="ingredient-section" wx:if="{{currentTab === 1}}">
+      <view class="card">
+        <view class="card-title">选择肉食食材<text class="card-hint">（可多选）</text></view>
+        <view class="ingredient-grid">
+          <view
+            wx:for="{{meats}}"
+            wx:key="id"
+            class="ingredient-item"
+            data-name="{{item.name}}"
+            bindtap="onIngredientTap"
+          >
+            <view class="ingredient-emoji {{selectedMap[item.name] ? 'ingredient-emoji-active' : ''}}">
+              {{item.emoji}}
+            </view>
+            <text class="ingredient-name {{selectedMap[item.name] ? 'ingredient-name-active' : ''}}">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 面/谷物/水果 -->
+    <view class="ingredient-section" wx:if="{{currentTab === 2}}">
+      <view class="card">
+        <view class="card-title">选择面/谷物/水果<text class="card-hint">（可多选）</text></view>
+        <view class="ingredient-grid">
+          <view
+            wx:for="{{grainsFruits}}"
+            wx:key="id"
+            class="ingredient-item"
+            data-name="{{item.name}}"
+            bindtap="onIngredientTap"
+          >
+            <view class="ingredient-emoji {{selectedMap[item.name] ? 'ingredient-emoji-active' : ''}}">
+              {{item.emoji}}
+            </view>
+            <text class="ingredient-name {{selectedMap[item.name] ? 'ingredient-name-active' : ''}}">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 烹饪方式 -->
+    <view class="card">
+      <view class="card-title">选择烹饪方式<text class="card-hint">（可选一种）</text></view>
+      <view class="method-grid">
+        <view
+          wx:for="{{cookingMethods}}"
+          wx:key="id"
+          class="method-item {{selectedMethod === item.name ? 'method-active' : ''}}"
+          data-name="{{item.name}}"
+          bindtap="onMethodTap"
+        >
+          <text class="method-emoji">{{item.emoji}}</text>
+          <text class="method-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 搜索按钮 -->
+    <view class="search-btn-wrap">
+      <view class="btn-primary search-btn" bindtap="onSearch">
+        🔍 搜索食谱 ({{selectedIngredients.length}}种食材{{selectedMethod ? ' + ' + selectedMethod : ''}})
+      </view>
+    </view>
+  </view>
+</scroll-view>

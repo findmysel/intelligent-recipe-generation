@@ -1,0 +1,49 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/search/search",
+    "pages/community/community",
+    "pages/profile/profile",
+    "pages/recipe-list/recipe-list",
+    "pages/recipe-detail/recipe-detail",
+    "pages/upload/upload",
+    "pages/article-list/article-list",
+    "pages/article-detail/article-detail",
+    "pages/ai-search/ai-search",
+    "pages/hot-rank/hot-rank",
+    "pages/lucky-box/lucky-box",
+    "pages/admin/audit/audit"
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "味道星球",
+    "navigationBarBackgroundColor": "#FF6B35",
+    "backgroundColor": "#F5F5F5"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#999999",
+    "selectedColor": "#FF6B35",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/search/search",
+        "text": "搜索"
+      },
+      {
+        "pagePath": "pages/community/community",
+        "text": "社区"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "componentFramework": "glass-easel",
+  "lazyCodeLoading": "requiredComponents"
+}

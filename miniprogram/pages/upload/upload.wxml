@@ -1,0 +1,94 @@
+<!--pages/upload/upload.wxml - 上传食谱页-->
+<scroll-view class="scrollarea" scroll-y enhanced show-scrollbar="{{false}}">
+  <view class="container">
+    <view class="page-header">
+      <text class="page-header-emoji">📝</text>
+      <text class="page-header-title">分享你的独家食谱</text>
+      <text class="page-header-desc">上传后其他用户可以评分和评价</text>
+    </view>
+
+    <!-- 基本信息 -->
+    <view class="card">
+      <view class="form-title">基本信息</view>
+
+      <view class="form-item">
+        <text class="form-label">食谱名称 *</text>
+        <input class="form-input" placeholder="例如：妈妈的红烧肉" bindinput="onInputName" value="{{name}}" />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">所需食材 *</text>
+        <input class="form-input" placeholder="用逗号分隔，如：猪肉，土豆，青椒" bindinput="onInputIngredients" value="{{ingredients}}" />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">烹饪方式 *</text>
+        <picker mode="selector" range="{{cookingMethods}}" value="{{methodIndex}}" bindchange="onMethodChange">
+          <view class="form-picker">
+            {{cookingMethod || '请选择烹饪方式'}}
+            <text class="picker-arrow">▼</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-row">
+        <view class="form-item half">
+          <text class="form-label">菜系</text>
+          <picker mode="selector" range="{{cuisineList}}" value="{{cuisineIndex}}" bindchange="onCuisineChange">
+            <view class="form-picker">{{cuisine || '选择菜系'}} <text class="picker-arrow">▼</text></view>
+          </picker>
+        </view>
+        <view class="form-item half">
+          <text class="form-label">难度</text>
+          <picker mode="selector" range="{{difficultyList}}" value="{{difficultyIndex}}" bindchange="onDifficultyChange">
+            <view class="form-picker">{{difficulty || '选择难度'}} <text class="picker-arrow">▼</text></view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="form-row">
+        <view class="form-item half">
+          <text class="form-label">烹饪时间</text>
+          <input class="form-input" placeholder="如：30分钟" bindinput="onInputTime" value="{{time}}" />
+        </view>
+        <view class="form-item half">
+          <text class="form-label">归类</text>
+          <picker mode="selector" range="{{regionList}}" value="{{regionIndex}}" bindchange="onRegionChange">
+            <view class="form-picker">{{region || '选择归类'}} <text class="picker-arrow">▼</text></view>
+          </picker>
+        </view>
+      </view>
+    </view>
+
+    <!-- 做法步骤 -->
+    <view class="card">
+      <view class="form-title">做法步骤</view>
+      <view class="form-item">
+        <text class="form-label">步骤详情 *（每行一个步骤）</text>
+        <textarea class="form-textarea" placeholder="第一步：...\n第二步：...\n第三步：..." bindinput="onInputSteps" value="{{steps}}" maxlength="1000" />
+      </view>
+    </view>
+
+    <!-- 额外信息 -->
+    <view class="card">
+      <view class="form-title">额外信息（选填）</view>
+      <view class="form-item">
+        <text class="form-label">烹饪注意事项</text>
+        <textarea class="form-textarea small" placeholder="有什么需要特别注意的？" bindinput="onInputTips" value="{{tips}}" maxlength="500" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">相关饮食文化</text>
+        <textarea class="form-textarea small" placeholder="分享这道菜背后的故事..." bindinput="onInputCulture" value="{{culture}}" maxlength="500" />
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="submit-wrap">
+      <view class="btn-primary submit-btn" bindtap="onSubmit">提交食谱</view>
+      <view class="back-btn cancel-back" bindtap="onGoBack">
+        <text class="back-arrow">←</text>
+        <text>取消返回</text>
+      </view>
+    </view>
+  </view>
+</scroll-view>

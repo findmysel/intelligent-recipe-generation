@@ -1,0 +1,94 @@
+/**pages/search/search.wxss**/
+page { height: 100vh; display: flex; flex-direction: column; }
+.scrollarea { flex: 1; }
+
+/* 已选展示栏 */
+.selected-bar {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 16rpx 24rpx;
+  margin: 16rpx 24rpx 0;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.selected-label { font-size: 24rpx; color: #999; white-space: nowrap; }
+.selected-tags { display: flex; flex-wrap: wrap; flex: 1; margin-left: 12rpx; }
+.selected-tag {
+  background: #FFF0EB;
+  color: #FF6B35;
+  font-size: 22rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  margin: 4rpx 8rpx 4rpx 0;
+}
+.method-tag { background: #E8F5E9; color: #4CAF50; }
+.clear-btn { font-size: 24rpx; color: #999; white-space: nowrap; padding-left: 12rpx; }
+
+/* Tab切换 */
+.tab-header {
+  display: flex;
+  padding: 20rpx 24rpx 0;
+  gap: 16rpx;
+}
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  font-size: 26rpx;
+  color: #666;
+  background: #fff;
+  border-radius: 12rpx;
+  border: 2rpx solid #eee;
+}
+.tab-active {
+  color: #FF6B35;
+  border-color: #FF6B35;
+  background: #FFF0EB;
+  font-weight: 600;
+}
+
+/* 卡片 */
+.card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+.card-hint { font-size: 22rpx; color: #bbb; font-weight: 400; margin-left: 8rpx; }
+
+/* 烹饪方式网格 */
+.method-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+.method-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 16rpx 24rpx;
+  background: #F8F8F8;
+  border-radius: 12rpx;
+  border: 2rpx solid transparent;
+  transition: all 0.2s;
+}
+.method-active {
+  border-color: #4CAF50;
+  background: #E8F5E9;
+}
+.method-emoji { font-size: 32rpx; }
+.method-name { font-size: 26rpx; color: #333; }
+.method-active .method-name { color: #4CAF50; font-weight: 600; }
+
+/* 搜索按钮 */
+.search-btn-wrap {
+  padding: 32rpx 24rpx;
+  padding-bottom: 60rpx;
+}
+.search-btn {
+  font-size: 30rpx;
+  padding: 24rpx 0;
+  text-align: center;
+  border-radius: 44rpx;
+}

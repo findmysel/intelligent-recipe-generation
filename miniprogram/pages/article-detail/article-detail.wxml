@@ -1,0 +1,142 @@
+<!--pages/article-detail/article-detail.wxml - 文章详情页-->
+<scroll-view class="scrollarea" scroll-y show-scrollbar="{{false}}">
+  <view class="container" wx:if="{{article}}">
+    <!-- 文章头部 -->
+    <view class="article-header">
+      <text class="article-title">{{article.title}}</text>
+      <view class="article-meta-row">
+        <text class="meta-author">{{article.author}}</text>
+        <text class="meta-dot">·</text>
+        <text class="meta-time">{{article.publishTime}}</text>
+        <text class="meta-dot">·</text>
+        <text class="meta-read">{{article.readTime}}</text>
+      </view>
+      <view class="article-tags" wx:if="{{article.tags.length > 0}}">
+        <text class="tag" wx:for="{{article.tags}}" wx:key="*this" wx:for-item="tag">{{tag}}</text>
+      </view>
+    </view>
+
+    <!-- 评分区域 -->
+    <view class="rating-bar">
+      <view class="rating-left">
+        <text class="rating-score">⭐ {{article.rating}}</text>
+        <text class="rating-count">{{article.ratingCount}}人评分</text>
+      </view>
+      <view class="rating-btn" bindtap="onShowRating">
+        <text>📝 给文章评分</text>
+      </view>
+    </view>
+
+    <!-- Tab切换 -->
+    <view class="tab-header">
+      <view
+        class="tab-item {{activeTab === 'content' ? 'tab-active' : ''}}"
+        data-tab="content"
+        bindtap="onTabSwitch"
+      >📖 正文</view>
+      <view
+        class="tab-item {{activeTab === 'comment' ? 'tab-active' : ''}}"
+        data-tab="comment"
+        bindtap="onTabSwitch"
+      >💬 评论 ({{comments.length}})</view>
+    </view>
+
+    <!-- 正文内容 -->
+    <view class="article-content" wx:if="{{activeTab === 'content'}}">
+      <view class="content-text">{{article.content}}</view>
+    </view>
+
+    <!-- 评论列表 -->
+    <view class="comment-section" wx:if="{{activeTab === 'comment'}}">
+      <view class="comment-header">
+        <text class="section-title">💬 评论 ({{comments.length}})</text>
+        <view class="comment-btn" bindtap="onShowComment">
+          <text>✏️ 写评论</text>
+        </view>
+      </view>
+
+      <view class="comment-list" wx:if="{{comments.length > 0}}">
+        <view class="comment-item" wx:for="{{comments}}" wx:key="id">
+          <view class="comment-avatar">
+            <text>{{item.userName.charAt(0)}}</text>
+          </view>
+          <view class="comment-body">
+            <view class="comment-user">
+              <text class="comment-name">{{item.userName}}</text>
+              <text class="comment-time">{{item.time}}</text>
+            </view>
+            <text class="comment-text">{{item.content}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="empty-comments" wx:if="{{comments.length === 0}}">
+        <text class="empty-icon">💬</text>
+        <text class="empty-text">还没有评论</text>
+        <text class="empty-hint">成为第一个评论的人吧！</text>
+      </view>
+    </view>
+
+    <!-- 底部操作栏 -->
+    <view class="bottom-bar">
+      <view class="action-item" bindtap="onShowComment">
+        <text class="action-icon">💬</text>
+        <text class="action-text">评论</text>
+      </view>
+      <view class="action-item" bindtap="onShowRating">
+        <text class="action-icon">⭐</text>
+        <text class="action-text">评分</text>
+      </view>
+      <view class="action-item" bindtap="onShareAppMessage">
+        <text class="action-icon">📤</text>
+        <text class="action-text">分享</text>
+      </view>
+    </view>
+
+    <!-- 评分弹窗 -->
+    <view class="modal-mask" wx:if="{{showRatingModal}}" bindtap="onCloseRating">
+      <view class="modal-content rating-modal" catchtap="">
+        <view class="modal-header">
+          <text class="modal-title">⭐ 给文章评分</text>
+          <text class="modal-close" bindtap="onCloseRating">✕</text>
+        </view>
+        <view class="modal-body">
+          <view class="rating-stars">
+            <text
+              class="star-icon {{userRating >= item ? 'star-active' : ''}}"
+              wx:for="{{[1,2,3,4,5]}}"
+              wx:key="*this"
+              data-score="{{item}}"
+              bindtap="onRatingSelect"
+            >⭐</text>
+          </view>
+          <text class="rating-label">{{userRating}} 星</text>
+          <view class="submit-btn" bindtap="onSubmitRating">确认评分</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 评论弹窗 -->
+    <view class="modal-mask modal-visible" wx:if="{{showCommentModal}}">
+      <view class="modal-content comment-modal" catchtap="stopProp">
+        <view class="modal-header">
+          <text class="modal-title">💬 写评论</text>
+          <text class="modal-close" bindtap="onCloseComment">✕</text>
+        </view>
+        <view class="modal-body">
+          <textarea
+            class="comment-input"
+            placeholder="写下你的评论..."
+            value="{{commentContent}}"
+            bindinput="onCommentInput"
+            bindconfirm="onKeyboardConfirm"
+            cursor-spacing="30"
+            confirm-type="done"
+            maxlength="200"
+          />
+          <view class="submit-btn" bindtap="onSubmitComment">发表评论</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>

@@ -1,0 +1,203 @@
+<!--pages/article-list/article-list.wxml - 饮食文化文章列表页-->
+<scroll-view class="scrollarea" scroll-y enhanced show-scrollbar="{{false}}">
+  <view class="container">
+    <!-- 顶部标题 -->
+    <view class="page-header">
+      <text class="page-title">📖 饮食文化</text>
+      <text class="page-subtitle">品味中华美食，探寻舌尖上的文化</text>
+    </view>
+
+    <!-- Tab切换 -->
+    <view class="tab-header">
+      <view
+        class="tab-item {{activeTab === 'recommend' ? 'tab-active' : ''}}"
+        data-tab="recommend"
+        bindtap="onTabChange"
+      >⭐ 推荐</view>
+      <view
+        class="tab-item {{activeTab === 'all' ? 'tab-active' : ''}}"
+        data-tab="all"
+        bindtap="onTabChange"
+      >📚 全部</view>
+      <view
+        class="tab-item {{activeTab === 'mine' ? 'tab-active' : ''}}"
+        data-tab="mine"
+        bindtap="onTabChange"
+      >✏️ 我的</view>
+    </view>
+
+    <!-- 推荐文章 -->
+    <block wx:if="{{activeTab === 'recommend'}}">
+      <view class="section-title">🏆 高分好文</view>
+      <view class="top-article-card" bindtap="onArticleTap" data-id="{{topArticles[0].id}}" wx:if="{{topArticles.length > 0}}">
+        <view class="top-article-cover">
+          <text class="cover-emoji">📖</text>
+        </view>
+        <view class="top-article-info">
+          <text class="top-article-title">{{topArticles[0].title}}</text>
+          <text class="top-article-summary">{{topArticles[0].summary}}</text>
+          <view class="top-article-meta">
+            <text class="meta-author">{{topArticles[0].author}}</text>
+            <text class="meta-rating">⭐ {{topArticles[0].rating}}</text>
+            <text class="meta-time">{{topArticles[0].readTime}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="top-article-list">
+        <view
+          class="top-article-item"
+          wx:for="{{topArticles}}"
+          wx:key="id"
+          wx:if="{{index > 0}}"
+          bindtap="onArticleTap"
+          data-id="{{item.id}}"
+        >
+          <text class="item-rank">0{{index + 1}}</text>
+          <view class="item-info">
+            <text class="item-title">{{item.title}}</text>
+            <view class="item-meta">
+              <text>⭐ {{item.rating}}</text>
+              <text>{{item.readTime}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="section-title" style="margin-top: 40rpx;">📖 更多文章</view>
+      <view
+        class="article-card"
+        wx:for="{{articles}}"
+        wx:key="id"
+        wx:if="{{index < 5}}"
+        bindtap="onArticleTap"
+        data-id="{{item.id}}"
+      >
+        <view class="article-cover">
+          <text class="cover-emoji-sm">📚</text>
+        </view>
+        <view class="article-info">
+          <text class="article-title">{{item.title}}</text>
+          <text class="article-summary">{{item.summary}}</text>
+          <view class="article-meta">
+            <text class="meta-author">{{item.author}}</text>
+            <text class="meta-rating">⭐ {{item.rating}}</text>
+            <text class="meta-time">{{item.readTime}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 全部文章 -->
+    <block wx:if="{{activeTab === 'all'}}">
+      <view class="section-title">📚 全部文章</view>
+      <view
+        class="article-card"
+        wx:for="{{articles}}"
+        wx:key="id"
+        bindtap="onArticleTap"
+        data-id="{{item.id}}"
+      >
+        <view class="article-cover">
+          <text class="cover-emoji-sm">📚</text>
+        </view>
+        <view class="article-info">
+          <text class="article-title">{{item.title}}</text>
+          <text class="article-summary">{{item.summary}}</text>
+          <view class="article-tags" wx:if="{{item.tags.length > 0}}">
+            <text class="tag" wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag">{{tag}}</text>
+          </view>
+          <view class="article-meta">
+            <text class="meta-author">{{item.author}}</text>
+            <text class="meta-rating">⭐ {{item.rating}}</text>
+            <text class="meta-time">{{item.readTime}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 我的文章 -->
+    <block wx:if="{{activeTab === 'mine'}}">
+      <view class="mine-header">
+        <text class="section-title">✏️ 我的创作</text>
+        <view class="publish-btn" bindtap="onShowPublish">
+          <text>📝 写文章</text>
+        </view>
+      </view>
+      <view
+        class="article-card"
+        wx:for="{{userArticles}}"
+        wx:key="id"
+        bindtap="onArticleTap"
+        data-id="{{item.id}}"
+      >
+        <view class="article-cover">
+          <text class="cover-emoji-sm">✏️</text>
+        </view>
+        <view class="article-info">
+          <text class="article-title">{{item.title}}</text>
+          <text class="article-summary">{{item.summary}}</text>
+          <view class="article-meta">
+            <text class="meta-author">我</text>
+            <text class="meta-rating">⭐ {{item.rating}}</text>
+            <text class="meta-time">{{item.readTime}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="empty-tip" wx:if="{{!hasUserArticles}}">
+        <text class="empty-icon">📝</text>
+        <text class="empty-text">还没有创作文章</text>
+        <text class="empty-hint">点击上方"写文章"开始创作吧！</text>
+      </view>
+    </block>
+  </view>
+</scroll-view>
+
+<!-- 发布文章弹窗 -->
+<view class="modal-mask {{showPublishModal ? 'modal-show' : ''}}" hidden="{{!showPublishModal}}">
+  <view class="modal-content">
+    <view class="modal-header">
+      <text class="modal-title">📝 撰写文章</text>
+      <text class="modal-close" bindtap="onClosePublish">✕</text>
+    </view>
+    <scroll-view class="modal-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+      <view class="modal-body">
+        <view class="form-item">
+          <text class="form-label">标题</text>
+          <input
+            class="form-input"
+            placeholder="输入文章标题"
+            value="{{publishTitle}}"
+            bindinput="onTitleInput"
+            maxlength="50"
+          />
+        </view>
+        <view class="form-item">
+          <text class="form-label">内容</text>
+          <textarea
+            class="form-textarea"
+            placeholder="输入文章内容..."
+            value="{{publishContent}}"
+            bindinput="onContentInput"
+            bindconfirm="onPublishConfirm"
+            cursor-spacing="30"
+            confirm-type="done"
+            maxlength="2000"
+            auto-height
+          />
+        </view>
+        <view class="form-item">
+          <text class="form-label">标签（用逗号分隔）</text>
+          <input
+            class="form-input"
+            placeholder="例如：养生, 传统, 美食"
+            value="{{publishTags}}"
+            bindinput="onTagsInput"
+            maxlength="50"
+          />
+        </view>
+        <view class="submit-btn" bindtap="onSubmitArticle">发布文章</view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

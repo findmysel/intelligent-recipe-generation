@@ -1,0 +1,86 @@
+<!--pages/recipe-list/recipe-list.wxml - 食谱列表页-->
+<view class="page-container">
+  <!-- 搜索条件回显 -->
+  <view class="condition-bar">
+    <text class="condition-label">搜索条件：</text>
+    <view class="condition-tags">
+      <text class="cond-tag" wx:for="{{selectedIngredients}}" wx:key="*this">{{item}}</text>
+      <text class="cond-tag cond-method" wx:if="{{selectedMethod}}">{{selectedMethod}}</text>
+    </view>
+    <text class="modify-btn" bindtap="onBackSearch">修改</text>
+  </view>
+
+  <!-- 菜系筛选 -->
+  <scroll-view class="cuisine-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="cuisine-list">
+      <view
+        wx:for="{{cuisines}}"
+        wx:key="*this"
+        class="cuisine-item {{selectedCuisine === item ? 'cuisine-active' : ''}}"
+        data-cuisine="{{item}}"
+        bindtap="onCuisineChange"
+      >{{item}}</view>
+    </view>
+  </scroll-view>
+
+  <!-- 结果统计 -->
+  <view class="result-count">共找到 <text class="count-num">{{totalCount}}</text> 个食谱</view>
+
+  <!-- 食谱列表 -->
+  <scroll-view class="recipe-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+    <view wx:if="{{filteredRecipes.length === 0}}" class="empty-state">
+      <text class="empty-icon">🍽️</text>
+      <text class="empty-text">没有找到匹配的食谱</text>
+      <text class="empty-text">试试换个条件搜索吧</text>
+      <view class="back-btn empty-back" bindtap="onBackSearch">
+        <text class="back-arrow">←</text>
+        <text>返回修改条件</text>
+      </view>
+      <view class="create-btn" bindtap="onGoUpload">
+        <text>📝 我有独家食谱，去上传</text>
+      </view>
+    </view>
+
+    <view
+      wx:for="{{filteredRecipes}}"
+      wx:key="id"
+      class="recipe-item"
+      data-id="{{item.id}}"
+      bindtap="onRecipeTap"
+    >
+      <view class="recipe-left">
+        <view class="recipe-thumb-box">
+          <image
+            wx:if="{{item.image && item.image.startsWith('http')}}"
+            class="recipe-thumb-img"
+            src="{{item.image}}"
+            mode="aspectFill"
+            lazy-load="true"
+          />
+          <text wx:else class="recipe-emoji">{{item.cookingMethod === '炒' ? '🍳' : item.cookingMethod === '蒸' ? '♨️' : item.cookingMethod === '煮' ? '🫕' : item.cookingMethod === '烤' ? '🔥' : item.cookingMethod === '炸' ? '🍟' : item.cookingMethod === '凉拌' ? '🥗' : item.cookingMethod === '炖' ? '🍲' : '🥘'}}</text>
+        </view>
+      </view>
+      <view class="recipe-right">
+        <view class="recipe-header">
+          <text class="recipe-name">{{item.name}}</text>
+          <text class="cuisine-badge">{{item.cuisine}}</text>
+        </view>
+        <view class="recipe-ingredients">
+          <text class="ing-label">食材：</text>
+          <text class="ing-text">{{item.ingredientsText}}</text>
+        </view>
+        <view class="recipe-bottom">
+          <view class="recipe-tags-row">
+            <text class="small-tag">{{item.cookingMethod}}</text>
+            <text class="small-tag">{{item.difficulty}}</text>
+            <text class="small-tag">{{item.time}}</text>
+          </view>
+          <view class="recipe-rating-row">
+            <text class="star-active">★</text>
+            <text class="rate-val">{{item.rating}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

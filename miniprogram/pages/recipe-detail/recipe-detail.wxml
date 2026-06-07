@@ -1,0 +1,176 @@
+<!--pages/recipe-detail/recipe-detail.wxml - 食谱详情页-->
+<scroll-view class="scrollarea" scroll-y enhanced show-scrollbar="{{false}}">
+  <view class="container" wx:if="{{recipe}}">
+    <!-- 顶部食谱卡片 -->
+    <view class="hero-card">
+      <view class="hero-emoji">{{recipe.cookingMethod === '炒' ? '🍳' : recipe.cookingMethod === '蒸' ? '♨️' : recipe.cookingMethod === '煮' ? '🫕' : recipe.cookingMethod === '烤' ? '🔥' : recipe.cookingMethod === '炸' ? '🍟' : recipe.cookingMethod === '凉拌' ? '🥗' : recipe.cookingMethod === '炖' ? '🍲' : '🥘'}}</view>
+      <view class="hero-info">
+        <text class="hero-name">{{recipe.name}}</text>
+        <view class="hero-tags">
+          <text class="hero-tag">{{recipe.cuisine}}</text>
+          <text class="hero-tag">{{recipe.cookingMethod}}</text>
+          <text class="hero-tag">{{recipe.difficulty}}</text>
+          <text class="hero-tag">⏱ {{recipe.time}}</text>
+        </view>
+        <view class="hero-rating">
+          <text class="star-active" wx:for="{{starsArray}}" wx:key="*this" wx:if="{{item <= recipe.rating}}">★</text>
+          <text class="rating-text">{{recipe.rating}} ({{recipe.ratingCount}}人评价)</text>
+        </view>
+        <text class="hero-author">{{recipe.author || '平台精选'}}</text>
+      </view>
+      <view class="fav-btn {{isFavorite ? 'fav-active' : ''}}" bindtap="onToggleFavorite">
+        {{isFavorite ? '❤️' : '🤍'}}
+      </view>
+    </view>
+
+    <!-- 食材列表 -->
+    <view class="card">
+      <view class="card-title-row">
+        <text class="card-title">🥘 所需食材</text>
+      </view>
+      <view class="ingredients-list">
+        <view class="ing-chip" wx:for="{{recipe.ingredients}}" wx:key="*this">{{item}}</view>
+      </view>
+    </view>
+
+    <!-- 营养面板 (AI 分析) -->
+    <view class="card" wx:if="{{recipe.nutrition}}">
+      <view class="card-title-row">
+        <text class="card-title">🔬 AI 营养分析</text>
+        <text class="nutrition-unit">* 约每份含量</text>
+      </view>
+      <view class="nutrition-grid">
+        <view class="nutri-item">
+          <text class="nutri-val">{{recipe.nutrition.calories}}</text>
+          <text class="nutri-label">能量(kcal)</text>
+        </view>
+        <view class="nutri-item">
+          <text class="nutri-val">{{recipe.nutrition.protein}}g</text>
+          <text class="nutri-label">蛋白质</text>
+        </view>
+        <view class="nutri-item">
+          <text class="nutri-val">{{recipe.nutrition.fat}}g</text>
+          <text class="nutri-label">脂肪</text>
+        </view>
+        <view class="nutri-item">
+          <text class="nutri-val">{{recipe.nutrition.carbs}}g</text>
+          <text class="nutri-label">碳水</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 内容Tab切换 -->
+    <view class="detail-tabs">
+      <view class="dtab {{activeTab === 'steps' ? 'dtab-active' : ''}}" data-tab="steps" bindtap="onTabSwitch">📋 做法步骤</view>
+      <view class="dtab {{activeTab === 'tips' ? 'dtab-active' : ''}}" data-tab="tips" bindtap="onTabSwitch">⚠️ 注意事项</view>
+      <view class="dtab {{activeTab === 'culture' ? 'dtab-active' : ''}}" data-tab="culture" bindtap="onTabSwitch">📖 饮食文化</view>
+    </view>
+
+    <!-- 做法步骤 -->
+    <view class="card" wx:if="{{activeTab === 'steps'}}">
+      <view class="steps-list">
+        <view class="step-item" wx:for="{{recipe.steps}}" wx:key="index">
+          <view class="step-num">{{index + 1}}</view>
+          <text class="step-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 烹饪注意事项 -->
+    <view class="card" wx:if="{{activeTab === 'tips'}}">
+      <view class="card-title-row">
+        <text class="card-title">⚠️ 烹饪注意事项</text>
+      </view>
+      <view class="tips-content">
+        <text class="tips-text">{{recipe.tips}}</text>
+      </view>
+    </view>
+
+    <!-- 饮食文化 -->
+    <view class="card" wx:if="{{activeTab === 'culture'}}">
+      <view class="card-title-row">
+        <text class="card-title">📖 饮食文化</text>
+      </view>
+      <view class="culture-content">
+        <text class="culture-text">{{recipe.culture}}</text>
+      </view>
+    </view>
+
+    <!-- 用户评价区 -->
+    <view class="card">
+      <view class="card-title-row">
+        <text class="card-title">💬 用户评价 ({{reviews.length}})</text>
+        <view class="btn-outline review-btn" bindtap="onShowReview">写评价</view>
+      </view>
+
+      <view wx:if="{{reviews.length === 0}}" class="no-review">
+        <text class="no-review-text">暂无评价，来做第一个评价的人吧！</text>
+      </view>
+
+      <view wx:for="{{reviews}}" wx:key="id" class="review-item">
+        <view class="review-header">
+          <view class="review-avatar">👤</view>
+          <view class="review-user-info">
+            <text class="review-username">{{item.userName}}</text>
+            <text class="review-time">{{item.time}}</text>
+          </view>
+          <view class="review-stars">
+            <text class="star-active" wx:for="{{starsArray}}" wx:for-item="s" wx:key="*this" wx:if="{{s <= item.score}}">★</text>
+            <text class="star" wx:for="{{starsArray}}" wx:for-item="s" wx:key="*this" wx:if="{{s > item.score}}">★</text>
+          </view>
+        </view>
+        <text class="review-comment">{{item.comment}}</text>
+      </view>
+    </view>
+
+    <!-- 地区标签（用户上传的食谱） -->
+    <view class="card" wx:if="{{recipe.isUserCreated && recipe.region}}">
+      <view class="card-title-row">
+        <text class="card-title">🏷️ 归类</text>
+      </view>
+      <view class="region-tag">{{recipe.region}}</view>
+    </view>
+
+    <!-- 底部返回 -->
+    <view class="bottom-back" bindtap="onGoBack">
+      <view class="back-btn">
+        <text class="back-arrow">←</text>
+        <text>返回上一页</text>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 评价弹窗 -->
+<view class="modal-mask" wx:if="{{showReviewModal}}">
+  <view class="modal-content" catchtap="stopProp">
+    <text class="modal-title">写评价</text>
+    <view class="score-row">
+      <text class="score-label">评分：</text>
+      <view class="score-stars">
+        <text
+          wx:for="{{starsArray}}"
+          wx:key="*this"
+          class="{{item <= reviewScore ? 'star-active' : 'star'}} score-star"
+          data-score="{{item}}"
+          bindtap="onScoreTap"
+        >★</text>
+      </view>
+      <text class="score-num">{{reviewScore}}分</text>
+    </view>
+    <textarea
+      class="review-textarea"
+      placeholder="分享你的烹饪体验和建议..."
+      value="{{reviewComment}}"
+      bindinput="onCommentInput"
+      bindconfirm="onKeyboardConfirm"
+      cursor-spacing="30"
+      confirm-type="done"
+      maxlength="200"
+    />
+    <view class="modal-btns">
+      <view class="modal-cancel" bindtap="onCloseReview">取消</view>
+      <view class="btn-primary modal-submit" bindtap="onSubmitReview">提交评价</view>
+    </view>
+  </view>
+</view>

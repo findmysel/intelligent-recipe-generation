@@ -1,0 +1,129 @@
+<!--index.wxml - 首页-->
+<scroll-view class="scrollarea" scroll-y enhanced show-scrollbar="{{false}}">
+  <view class="container">
+    <!-- 顶部搜索栏 -->
+    <view class="search-bar" bindtap="onSearchTap">
+      <text class="search-icon">🔍</text>
+      <text class="search-placeholder">搜索食谱、食材...</text>
+    </view>
+
+    <!-- 快速入口 -->
+    <view class="quick-entries">
+      <view
+        wx:for="{{quickEntries}}"
+        wx:key="category"
+        class="quick-entry"
+        data-category="{{item.category}}"
+        bindtap="onQuickEntry"
+      >
+        <view class="quick-icon">{{item.icon}}</view>
+        <text class="quick-name">{{item.name}}</text>
+      </view>
+    </view>
+
+    <!-- 今日食谱盲盒入口 -->
+    <view class="lucky-box-banner" bindtap="onLuckyBoxTap" wx:if="{{dailyLucky}}">
+      <view class="lucky-left">
+        <text class="lucky-icon">🎁</text>
+        <view class="lucky-info">
+          <text class="lucky-title">今日食谱盲盒</text>
+          <text class="lucky-sub">点击开启今日惊喜</text>
+        </view>
+      </view>
+      <text class="lucky-name">{{dailyLucky.name}}</text>
+      <text class="lucky-arrow">›</text>
+    </view>
+
+    <!-- 饮食文化文章推荐 -->
+    <view class="article-section" wx:if="{{topArticles.length > 0}}">
+      <view class="section-header">
+        <text class="section-title">📖 饮食文化</text>
+        <text class="section-more" bindtap="onQuickEntry" data-category="article">更多 ›</text>
+      </view>
+      <view class="article-cards">
+        <view
+          class="article-card"
+          wx:for="{{topArticles}}"
+          wx:key="id"
+          bindtap="onArticleTap"
+          data-id="{{item.id}}"
+        >
+          <view class="article-cover">
+            <text class="cover-emoji">📚</text>
+          </view>
+          <view class="article-info">
+            <text class="article-title">{{item.title}}</text>
+            <view class="article-meta">
+              <text class="meta-rating">⭐ {{item.rating}}</text>
+              <text class="meta-time">{{item.readTime}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 轮播推荐 -->
+    <view class="banner-section">
+      <swiper class="banner-swiper" indicator-dots autoplay circular interval="{{4000}}">
+        <swiper-item wx:for="{{bannerRecipes}}" wx:key="id" bindtap="onRecipeTap" data-id="{{item.id}}">
+          <view class="banner-card">
+            <image wx:if="{{item.image && item.image.startsWith('http')}}" class="banner-bg-img" src="{{item.image}}" mode="aspectFill" />
+            <view wx:else class="banner-emoji">{{item.cookingMethod === '炒' ? '🍳' : item.cookingMethod === '蒸' ? '♨️' : item.cookingMethod === '煮' ? '🫕' : item.cookingMethod === '烤' ? '🔥' : item.cookingMethod === '炸' ? '🍟' : item.cookingMethod === '凉拌' ? '🥗' : item.cookingMethod === '炖' ? '🍲' : '🥘'}}</view>
+            <view class="banner-info">
+              <text class="banner-name">{{item.name}}</text>
+              <text class="banner-desc">{{item.cuisine}} · {{item.difficulty}} · {{item.time}}</text>
+            </view>
+          </view>
+        </swiper-item>
+      </swiper>
+    </view>
+
+    <!-- 功能按钮 -->
+    <view class="action-row">
+      <view class="action-btn" bindtap="onSearchTap">
+        <text class="action-icon">🍽️</text>
+        <text class="action-text">食材找食谱</text>
+      </view>
+      <view class="action-btn" bindtap="onHotRankTap">
+        <text class="action-icon">🔥</text>
+        <text class="action-text">热门排行</text>
+      </view>
+      <view class="action-btn" bindtap="onUploadTap">
+        <text class="action-icon">📝</text>
+        <text class="action-text">上传食谱</text>
+      </view>
+    </view>
+
+    <!-- 热门食谱 -->
+    <view class="section-header">
+      <text class="section-title">🔥 热门食谱</text>
+      <text class="section-more" bindtap="onHotRankTap">排行榜 ›</text>
+    </view>
+    <view class="recipe-grid">
+      <view
+        wx:for="{{hotRecipes}}"
+        wx:key="id"
+        class="recipe-card"
+        data-id="{{item.id}}"
+        bindtap="onRecipeTap"
+      >
+        <view class="recipe-thumb">
+          <image class="recipe-thumb-img" src="{{item.image}}" mode="aspectFill" lazy-load="true" />
+          <view class="recipe-cuisine-tag">{{item.cuisine}}</view>
+        </view>
+        <view class="recipe-info">
+          <text class="recipe-name">{{item.name}}</text>
+          <view class="recipe-meta">
+            <text class="recipe-difficulty">{{item.difficulty}}</text>
+            <text class="recipe-time">{{item.time}}</text>
+          </view>
+          <view class="recipe-rating">
+            <text class="star-active">★</text>
+            <text class="rating-num">{{item.rating}}</text>
+            <text class="rating-count">({{item.ratingCount}})</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>

@@ -1,0 +1,43 @@
+<!--pages/admin/audit/audit.wxml - 审核中心-->
+<scroll-view class="scrollarea" scroll-y enhanced show-scrollbar="{{false}}">
+  <view class="container">
+    <view class="page-header">
+      <text class="page-title">🛡️ 审核中心</text>
+      <text class="page-desc">管理员专区：审核用户上传的食谱</text>
+    </view>
+
+    <view class="pending-list">
+      <view class="empty-state" wx:if="{{pendingRecipes.length === 0}}">
+        <text class="empty-icon">✅</text>
+        <text class="empty-text">当前没有待审核的食谱</text>
+      </view>
+
+      <view class="recipe-card" wx:for="{{pendingRecipes}}" wx:key="id">
+        <view class="card-header">
+          <text class="recipe-name">{{item.name}}</text>
+          <text class="author-tag">作者：{{item.author}}</text>
+        </view>
+        
+        <view class="recipe-detail">
+          <view class="detail-item">
+            <text class="label">菜系：</text>
+            <text class="val">{{item.cuisine}}</text>
+          </view>
+          <view class="detail-item">
+            <text class="label">食材：</text>
+            <text class="val">{{item.ingredients.join(', ')}}</text>
+          </view>
+        </view>
+
+        <view class="action-btns">
+          <view class="btn-approve" bindtap="onApprove" data-id="{{item.id}}">审核通过</view>
+          <view class="btn-reject" bindtap="onReject" data-id="{{item.id}}">拒绝</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-tip">
+      <text>提示：审核通过后，该食谱将对全网用户可见</text>
+    </view>
+  </view>
+</scroll-view>

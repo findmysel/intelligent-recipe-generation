@@ -1,0 +1,164 @@
+/**pages/upload/upload.wxss**/
+page { 
+  height: 100vh; 
+  display: flex; 
+  flex-direction: column; 
+  background-color: #F8F9FA;
+}
+
+.scrollarea { 
+  flex: 1; 
+}
+
+.container {
+  padding: 24rpx;
+  padding-bottom: 100rpx;
+}
+
+.page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 0 32rpx;
+}
+
+.page-header-emoji { 
+  font-size: 80rpx; 
+}
+
+.page-header-title { 
+  font-size: 38rpx; 
+  font-weight: 700; 
+  color: #333; 
+  margin-top: 16rpx; 
+}
+
+.page-header-desc { 
+  font-size: 26rpx; 
+  color: #888; 
+  margin-top: 12rpx; 
+}
+
+/* 卡片样式优化 */
+.card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-bottom: 32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.03);
+}
+
+.form-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #FF6B35;
+  margin-bottom: 32rpx;
+  padding-left: 12rpx;
+  border-left: 8rpx solid #FF6B35;
+  line-height: 1;
+}
+
+.form-item { 
+  margin-bottom: 28rpx; 
+}
+
+.form-item:last-child {
+  margin-bottom: 0;
+}
+
+.form-label {
+  font-size: 28rpx;
+  color: #444;
+  font-weight: 600;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.form-input, .form-textarea, .form-picker {
+  width: 100%;
+  border: 2rpx solid #F0F0F0;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+  background: #FAFAFA;
+  transition: all 0.3s;
+}
+
+.form-input, .form-picker {
+  height: 96rpx;
+  min-height: 96rpx;
+  padding: 0 24rpx; /* 单行输入框水平内边距 */
+  display: flex;
+  align-items: center;
+}
+
+.form-textarea {
+  padding: 24rpx; /* 多行文本框保留四周内边距 */
+  height: 280rpx;
+  line-height: 1.5;
+}
+
+.form-textarea.small { 
+  height: 180rpx; 
+}
+
+.form-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #333;
+}
+
+.picker-arrow { 
+  font-size: 24rpx; 
+  color: #ccc; 
+}
+
+/* 双列布局优化 */
+.form-row { 
+  display: flex; 
+  gap: 24rpx; 
+  margin-bottom: 28rpx;
+}
+
+.form-item.half { 
+  flex: 1; 
+  margin-bottom: 0;
+}
+
+.submit-wrap { 
+  padding: 40rpx 0 80rpx; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 32rpx; 
+}
+
+.submit-btn { 
+  padding: 28rpx 0; 
+  text-align: center; 
+  font-size: 34rpx; 
+  font-weight: 700;
+  border-radius: 50rpx; 
+  width: 100%; 
+  background: linear-gradient(135deg, #FF9E7D 0%, #FF6B35 100%);
+  color: #ffffff;
+  box-shadow: 0 8rpx 16rpx rgba(255, 107, 53, 0.2);
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.cancel-back { 
+  font-size: 28rpx;
+  color: #999;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.back-arrow {
+  font-size: 32rpx;
+}

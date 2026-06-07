@@ -1,0 +1,156 @@
+<!--pages/community/community.wxml - 社区分享页-->
+<view class="page-container">
+  <!-- 顶部Tab -->
+  <view class="top-tabs">
+    <view class="top-tab {{activeTab === 'posts' ? 'top-tab-active' : ''}}" data-tab="posts" bindtap="onTabChange">📸 图文分享</view>
+    <view class="top-tab {{activeTab === 'hot' ? 'top-tab-active' : ''}}" data-tab="hot" bindtap="onTabChange">🔥 热门食谱</view>
+    <view class="top-tab {{activeTab === 'ai' ? 'top-tab-active' : ''}}" data-tab="ai" bindtap="onTabChange">🤖 AI创想</view>
+  </view>
+
+  <!-- 图文分享 -->
+  <scroll-view class="content-scroll" scroll-y enhanced show-scrollbar="{{false}}" wx:if="{{activeTab === 'posts'}}">
+    <view class="post-list">
+      <view class="post-card" wx:for="{{posts}}" wx:key="id">
+        <view class="post-header">
+          <view class="post-avatar">{{item.isAI ? '🤖' : '👤'}}</view>
+          <view class="post-user">
+            <text class="post-author">{{item.author}}</text>
+            <text class="post-time">{{item.time}}</text>
+          </view>
+          <view class="ai-badge" wx:if="{{item.isAI}}">AI</view>
+        </view>
+        <text class="post-content" wx:if="{{item.content !== '分享了图片'}}">{{item.content}}</text>
+        <!-- 图片展示 -->
+        <view class="post-images" wx:if="{{item.images && item.images.length > 0}}">
+          <view
+            class="post-image-item {{item.images.length === 1 ? 'single' : ''}}"
+            wx:for="{{item.images}}"
+            wx:key="*this"
+            data-url="{{item}}"
+            data-images="{{item.images}}"
+            bindtap="onPreviewImage"
+          >
+            <image class="post-img" src="{{item}}" mode="aspectFill" />
+          </view>
+        </view>
+        <view class="post-recipe-link" wx:if="{{item.recipeName}}" data-id="{{item.recipeId}}" bindtap="onRecipeTap">
+          <text class="link-icon">🍽️</text>
+          <text class="link-name">{{item.recipeName}}</text>
+          <text class="link-arrow">›</text>
+        </view>
+        <view class="post-actions">
+          <view class="post-action {{item.likedByUser ? 'action-liked' : ''}}" data-id="{{item.id}}" bindtap="onLike">
+            <text class="action-icon-small">{{item.likedByUser ? '❤️' : '👍'}}</text>
+            <text class="action-num">{{item.likes}}</text>
+          </view>
+          <view class="post-action" bindtap="onComment" data-id="{{item.id}}">
+            <text class="action-icon-small">💬</text>
+            <text class="action-num">{{item.comments}}</text>
+          </view>
+        </view>
+        <!-- 留言展示区 -->
+        <view class="post-comments" wx:if="{{item.commentList && item.commentList.length > 0}}">
+          <view class="comment-item" wx:for="{{item.commentList}}" wx:for-item="comment" wx:key="*this">
+            <text class="comment-author">{{comment.author}}：</text>
+            <text class="comment-content">{{comment.content}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 热门食谱 -->
+  <scroll-view class="content-scroll" scroll-y enhanced show-scrollbar="{{false}}" wx:if="{{activeTab === 'hot'}}">
+    <view class="hot-list">
+      <view class="hot-item" wx:for="{{hotRecipes}}" wx:key="id" data-id="{{item.id}}" bindtap="onRecipeTap">
+        <view class="hot-rank">{{index + 1}}</view>
+        <view class="hot-thumb">
+          <text class="hot-emoji">{{item.cookingMethod === '炒' ? '🍳' : item.cookingMethod === '蒸' ? '♨️' : item.cookingMethod === '煮' ? '🫕' : item.cookingMethod === '烤' ? '🔥' : item.cookingMethod === '炸' ? '🍟' : item.cookingMethod === '凉拌' ? '🥗' : item.cookingMethod === '炖' ? '🍲' : '🥘'}}</text>
+        </view>
+        <view class="hot-info">
+          <text class="hot-name">{{item.name}}</text>
+          <text class="hot-desc">{{item.cuisine}} · {{item.difficulty}} · {{item.time}}</text>
+          <view class="hot-stats">
+            <text class="star-active">★</text>
+            <text class="hot-rating">{{item.rating}}</text>
+            <text class="hot-count">{{item.ratingCount}}人评价</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- AI创想食谱 -->
+  <scroll-view class="content-scroll" scroll-y enhanced show-scrollbar="{{false}}" wx:if="{{activeTab === 'ai'}}">
+    <view class="ai-header">
+      <text class="ai-header-emoji">🤖</text>
+      <text class="ai-header-title">AI创想食谱</text>
+      <text class="ai-header-desc">由AI根据食材组合智能生成的创意食谱</text>
+    </view>
+    <view class="ai-list">
+      <view class="ai-card" wx:for="{{aiRecipeList}}" wx:key="id" data-id="{{item.id}}" bindtap="onRecipeTap">
+        <view class="ai-card-top">
+          <view class="ai-emoji">🤖✨</view>
+          <view class="ai-card-info">
+            <text class="ai-card-name">{{item.name}}</text>
+            <text class="ai-card-meta">{{item.cuisine}} · {{item.difficulty}} · {{item.time}}</text>
+          </view>
+        </view>
+        <view class="ai-card-ingredients">
+          <text class="ai-ing-label">食材：</text>
+          <text class="ai-ing-chip" wx:for="{{item.ingredients}}" wx:for-item="ing" wx:key="*this">{{ing}}</text>
+        </view>
+        <text class="ai-card-preview">{{item.steps[0]}}</text>
+        <view class="ai-card-btn">查看完整食谱 ›</view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 发帖按钮 -->
+  <view class="fab-btn" bindtap="onShowPost" wx:if="{{activeTab === 'posts'}}">✏️</view>
+</view>
+
+<!-- 发帖弹窗 - 固定全屏覆盖式 -->
+<view class="modal-mask {{showPostModal ? 'modal-show' : ''}}" wx:if="{{showPostModal}}">
+  <view class="modal-content" catchtap="stopProp">
+    <view class="modal-header-row">
+      <text class="modal-title">发布动态</text>
+      <text class="modal-close-icon" bindtap="onClosePost">✕</text>
+    </view>
+    <scroll-view class="modal-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+      <!-- 图片选择区域 -->
+      <view class="image-select-area">
+        <view class="selected-image-list">
+          <view class="image-item" wx:for="{{selectedImages}}" wx:key="*this">
+            <image class="selected-img" src="{{item}}" mode="aspectFill" />
+            <view class="image-remove" bindtap="onRemoveImage" data-index="{{index}}">✕</view>
+          </view>
+          <view class="add-image-btn" bindtap="onChooseImage" wx:if="{{selectedImages.length < 9}}">
+            <text class="add-icon">📷</text>
+            <text class="add-text">添加图片</text>
+          </view>
+        </view>
+        <text class="image-hint" wx:if="{{selectedImages.length === 0}}">上传图片让分享更生动</text>
+      </view>
+      <textarea
+        class="post-textarea"
+        placeholder="分享你的美食心得...配图更易获得互动哦~"
+        value="{{postContent}}"
+        bindinput="onPostContentInput"
+        bindconfirm="onKeyboardConfirm"
+        cursor-spacing="30"
+        confirm-type="done"
+        maxlength="500"
+        auto-height
+      />
+      <view class="post-recipe-input">
+        <text class="form-label-sm">关联食谱（选填）</text>
+        <input class="form-input-sm" placeholder="输入食谱名称" bindinput="onPostRecipeInput" value="{{postRecipeName}}" />
+      </view>
+    </scroll-view>
+    <view class="modal-btns">
+      <view class="modal-cancel" bindtap="onClosePost">取消</view>
+      <view class="modal-submit-btn" bindtap="onSubmitPost">发布</view>
+    </view>
+  </view>
+</view>

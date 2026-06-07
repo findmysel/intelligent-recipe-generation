@@ -1,0 +1,92 @@
+<!--pages/lucky-box/lucky-box.wxml - 食谱盲盒页-->
+<scroll-view class="scrollarea" scroll-y enhanced show-scrollbar="{{false}}">
+  <view class="container">
+    <!-- 页面标题 -->
+    <view class="page-header">
+      <text class="page-title">🎁 今日食谱盲盒</text>
+      <text class="page-subtitle">每天打开一个未知的美食惊喜</text>
+    </view>
+
+    <!-- 盲盒区域 -->
+    <view class="lucky-box-area">
+      <!-- 未开箱状态 -->
+      <block wx:if="{{!isOpened}}">
+        <view class="box-container {{isAnimating ? 'box-shake' : ''}}">
+          <view class="box-outer">
+            <view class="box-inner">
+              <text class="box-question">?</text>
+              <view class="box-sparkle"></view>
+            </view>
+          </view>
+        </view>
+        <view class="box-desc">
+          <text class="desc-text">🎰 每日盲盒惊喜</text>
+          <text class="desc-sub">点击开启，探索今日美食</text>
+        </view>
+        <view class="open-btn {{isAnimating ? 'btn-disabled' : ''}}" bindtap="onOpenBox">
+          {{isAnimating ? '🤖 开启中...' : '✨ 开启盲盒'}}
+        </view>
+      </block>
+
+      <!-- 已开箱状态 -->
+      <block wx:if="{{isOpened && dailyRecipe}}">
+        <view class="result-card">
+          <view class="result-header">
+            <text class="result-badge">🎉 你抽到了</text>
+          </view>
+          <view class="result-emoji">
+            {{dailyRecipe.cookingMethod === '炒' ? '🍳' : dailyRecipe.cookingMethod === '蒸' ? '♨️' : dailyRecipe.cookingMethod === '煮' ? '🫕' : dailyRecipe.cookingMethod === '烤' ? '🔥' : dailyRecipe.cookingMethod === '炸' ? '🍟' : dailyRecipe.cookingMethod === '炖' ? '🍲' : dailyRecipe.cookingMethod === '凉拌' ? '🥗' : '🥘'}}
+          </view>
+          <text class="result-name">{{dailyRecipe.name}}</text>
+          <view class="result-meta">
+            <text class="meta-tag">{{dailyRecipe.cuisine}}</text>
+            <text class="meta-tag">{{dailyRecipe.difficulty}}</text>
+            <text class="meta-tag">{{dailyRecipe.time}}</text>
+          </view>
+          <view class="result-info">
+            <view class="info-item">
+              <text class="info-label">所需食材</text>
+              <text class="info-value">{{dailyRecipe.ingredients.join('、')}}</text>
+            </view>
+            <view class="info-item">
+              <text class="info-label">烹饪方式</text>
+              <text class="info-value">{{dailyRecipe.cookingMethod}}</text>
+            </view>
+            <view class="info-item tips">
+              <text class="info-label">💡 小贴士</text>
+              <text class="info-value">{{dailyRecipe.tips}}</text>
+            </view>
+          </view>
+          <view class="result-actions">
+            <view class="action-btn primary" bindtap="onRecipeTap">查看完整做法</view>
+            <view class="action-btn secondary" bindtap="onShareBox">分享给好友</view>
+          </view>
+          <view class="reroll-btn" bindtap="onReRoll">🔄 重新抽取</view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 历史记录 -->
+    <view class="history-section" wx:if="{{history.length > 0}}">
+      <view class="history-header">
+        <text class="history-title">📜 抽取历史</text>
+      </view>
+      <view class="history-list">
+        <view
+          class="history-item"
+          wx:for="{{history}}"
+          wx:key="recipeId"
+          bindtap="onHistoryTap"
+          data-id="{{item.recipeId}}"
+        >
+          <text class="history-arrow">🍽️</text>
+          <view class="history-info">
+            <text class="history-name">{{item.recipeName}}</text>
+            <text class="history-time">{{item.time}}</text>
+          </view>
+          <text class="history-go">›</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>

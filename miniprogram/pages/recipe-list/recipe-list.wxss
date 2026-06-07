@@ -1,0 +1,121 @@
+/**pages/recipe-list/recipe-list.wxss**/
+.page-container { display: flex; flex-direction: column; height: 100vh; }
+
+/* 条件回显 */
+.condition-bar {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.condition-label { font-size: 24rpx; color: #999; white-space: nowrap; }
+.condition-tags { display: flex; flex-wrap: wrap; flex: 1; margin-left: 8rpx; }
+.cond-tag {
+  font-size: 22rpx;
+  color: #FF6B35;
+  background: #FFF0EB;
+  padding: 4rpx 14rpx;
+  border-radius: 16rpx;
+  margin: 4rpx 8rpx 4rpx 0;
+}
+.cond-method { color: #4CAF50; background: #E8F5E9; }
+.modify-btn { font-size: 24rpx; color: #FF6B35; white-space: nowrap; }
+
+/* 菜系筛选 */
+.cuisine-scroll {
+  background: #fff;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+  white-space: nowrap;
+}
+.cuisine-list { display: flex; padding: 0 16rpx; }
+.cuisine-item {
+  display: inline-block;
+  padding: 10rpx 24rpx;
+  font-size: 26rpx;
+  color: #666;
+  border-radius: 24rpx;
+  margin: 0 8rpx;
+  background: #F5F5F5;
+  white-space: nowrap;
+}
+.cuisine-active {
+  background: #FF6B35;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 结果统计 */
+.result-count {
+  padding: 16rpx 24rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+.count-num { color: #FF6B35; font-weight: 600; }
+
+/* 食谱列表 */
+.recipe-scroll { flex: 1; }
+.recipe-item {
+  display: flex;
+  background: #fff;
+  margin: 12rpx 24rpx;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.recipe-left { margin-right: 20rpx; }
+.recipe-thumb-box {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 16rpx;
+  background: linear-gradient(135deg, #FFE0D3, #FFF0EB);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.recipe-emoji { font-size: 56rpx; }
+.recipe-thumb-img {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 16rpx;
+  display: block;
+}
+
+.recipe-right { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.recipe-header { display: flex; align-items: center; justify-content: space-between; }
+.recipe-name { font-size: 30rpx; font-weight: 600; color: #333; }
+.cuisine-badge {
+  font-size: 20rpx;
+  color: #fff;
+  background: #FF6B35;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+.recipe-ingredients { margin-top: 8rpx; }
+.ing-label { font-size: 22rpx; color: #999; }
+.ing-text { font-size: 22rpx; color: #666; }
+.recipe-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 8rpx; }
+.recipe-tags-row { display: flex; gap: 8rpx; }
+.small-tag {
+  font-size: 20rpx;
+  color: #999;
+  background: #F5F5F5;
+  padding: 4rpx 10rpx;
+  border-radius: 6rpx;
+}
+.recipe-rating-row { display: flex; align-items: center; gap: 4rpx; }
+.rate-val { font-size: 24rpx; color: #FF6B35; font-weight: 600; }
+
+/* 空状态返回 */
+.empty-back { margin-top: 28rpx; }
+.create-btn {
+  margin-top: 24rpx;
+  padding: 16rpx 40rpx;
+  background: #FFF0EB;
+  color: #FF6B35;
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  border: 1rpx solid #FF6B35;
+}

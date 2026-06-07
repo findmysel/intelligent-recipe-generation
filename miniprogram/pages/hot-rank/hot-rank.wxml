@@ -1,0 +1,86 @@
+<!--pages/hot-rank/hot-rank.wxml - 热门食谱排行页-->
+<scroll-view class="scrollarea" scroll-y show-scrollbar="{{false}}">
+  <view class="container">
+    <!-- 页面标题 -->
+    <view class="page-header">
+      <text class="page-title">🔥 热门排行</text>
+      <text class="page-subtitle">探索当下最受欢迎的食谱</text>
+    </view>
+
+    <!-- 时间段选择 -->
+    <view class="period-tabs">
+      <view
+        wx:for="{{periods}}"
+        wx:key="key"
+        class="period-tab {{activePeriod === item.key ? 'period-active' : ''}}"
+        data-period="{{item.key}}"
+        bindtap="onPeriodChange"
+      >{{item.label}}</view>
+    </view>
+
+    <!-- 搜索热词排行 -->
+    <view class="section-card">
+      <view class="section-header">
+        <text class="section-title">🔍 热搜词</text>
+        <text class="section-subtitle">{{periodLabel}}热搜</text>
+      </view>
+      <view class="keyword-grid">
+        <block wx:for="{{hotKeywords}}" wx:key="keyword">
+          <view
+            class="keyword-item"
+            bindtap="onKeywordTap"
+            data-keyword="{{item.keyword}}"
+          >
+            <view class="keyword-rank {{index < 3 ? 'rank-top' : ''}}">
+              {{index + 1}}
+            </view>
+            <text class="keyword-text">{{item.keyword}}</text>
+            <text class="keyword-count">{{item.count}}次</text>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- 食谱热度排行 -->
+    <view class="section-card">
+      <view class="section-header">
+        <text class="section-title">🏆 食谱热度榜</text>
+        <text class="section-subtitle">按搜索量排序</text>
+      </view>
+      <view class="rank-list">
+        <block wx:for="{{hotRecipes}}" wx:key="id">
+          <view
+            class="rank-item"
+            bindtap="onRecipeTap"
+            data-id="{{item.id}}"
+          >
+            <view class="rank-number {{index < 3 ? 'rank-gold' : ''}}">
+              {{index + 1}}
+            </view>
+            <view class="rank-emoji">
+              {{item.cookingMethod === '炒' ? '🍳' : item.cookingMethod === '蒸' ? '♨️' : item.cookingMethod === '煮' ? '🫕' : item.cookingMethod === '烤' ? '🔥' : item.cookingMethod === '炸' ? '🍟' : item.cookingMethod === '炖' ? '🍲' : item.cookingMethod === '凉拌' ? '🥗' : '🥘'}}
+            </view>
+            <view class="rank-info">
+              <text class="rank-name">{{item.name}}</text>
+              <view class="rank-meta">
+                <text class="rank-cuisine">{{item.cuisine}}</text>
+                <text class="rank-dot">·</text>
+                <text class="rank-difficulty">{{item.difficulty}}</text>
+                <text class="rank-dot">·</text>
+                <text class="rank-time">{{item.time}}</text>
+              </view>
+              <view class="rank-rating">
+                <text class="star">⭐</text>
+                <text class="rating-val">{{item.rating}}</text>
+                <text class="rating-cnt">({{item.ratingCount}}人)</text>
+              </view>
+            </view>
+            <view class="rank-trend {{index < 3 ? 'trend-hot' : ''}}">
+              {{index < 3 ? '🔥' : '📈'}}
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+</scroll-view>

@@ -1,0 +1,33 @@
+/* pages/admin/audit/audit.wxss */
+page { background: #f8f9fa; }
+.container { padding: 32rpx; }
+.page-header { margin-bottom: 40rpx; }
+.page-title { font-size: 36rpx; font-weight: 700; color: #333; display: block; }
+.page-desc { font-size: 24rpx; color: #999; margin-top: 8rpx; }
+
+.recipe-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20rpx; }
+.recipe-name { font-size: 32rpx; font-weight: 600; color: #333; }
+.author-tag { font-size: 22rpx; color: #666; background: #eee; padding: 4rpx 12rpx; border-radius: 8rpx; }
+
+.recipe-detail { border-top: 1rpx solid #f0f0f0; border-bottom: 1rpx solid #f0f0f0; padding: 20rpx 0; margin-bottom: 24rpx; }
+.detail-item { margin-bottom: 8rpx; font-size: 26rpx; }
+.label { color: #999; }
+.val { color: #333; }
+
+.action-btns { display: flex; gap: 20rpx; }
+.btn-approve { flex: 1; height: 80rpx; background: #4CAF50; color: #fff; display: flex; align-items: center; justify-content: center; border-radius: 40rpx; font-size: 28rpx; font-weight: 600; }
+.btn-reject { width: 180rpx; height: 80rpx; border: 1rpx solid #ff4d4f; color: #ff4d4f; display: flex; align-items: center; justify-content: center; border-radius: 40rpx; font-size: 26rpx; }
+
+.empty-state { padding: 100rpx 0; text-align: center; }
+.empty-icon { font-size: 80rpx; display: block; margin-bottom: 20rpx; }
+.empty-text { font-size: 28rpx; color: #999; }
+
+.bottom-tip { text-align: center; font-size: 22rpx; color: #ccc; margin-top: 40rpx; }

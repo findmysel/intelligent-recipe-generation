@@ -1,0 +1,210 @@
+<!--pages/ai-search/ai-search.wxml - AI食谱检索页-->
+<scroll-view class="scrollarea" scroll-y enhanced show-scrollbar="{{false}}">
+  <view class="container">
+    <!-- AI检索说明 -->
+    <view class="ai-header">
+      <text class="ai-title">🤖 AI食谱检索</text>
+      <text class="ai-desc">选择食材，AI为您智能匹配或创想食谱</text>
+    </view>
+
+    <!-- 已选食材展示 -->
+    <view class="selected-bar" wx:if="{{selectedIngredients.length > 0 || selectedMethod || selectedCuisine}}">
+      <view class="selected-label">已选：</view>
+      <view class="selected-tags">
+        <view class="selected-tag" wx:for="{{selectedIngredients}}" wx:key="*this">{{item}} ✕</view>
+        <view class="selected-tag method-tag" wx:if="{{selectedMethod}}">{{selectedMethod}} ✕</view>
+        <view class="selected-tag cuisine-tag" wx:if="{{selectedCuisine}}">{{selectedCuisine}} ✕</view>
+      </view>
+      <view class="clear-btn" bindtap="onClear">清空</view>
+    </view>
+
+    <!-- 食材分类Tab -->
+    <view class="tab-header">
+      <view
+        wx:for="{{tabs}}"
+        wx:key="index"
+        class="tab-item {{currentTab === index ? 'tab-active' : ''}}"
+        data-index="{{index}}"
+        bindtap="onTabChange"
+      >{{item}}</view>
+    </view>
+
+    <!-- 素食 -->
+    <view class="ingredient-section" wx:if="{{currentTab === 0}}">
+      <view class="card">
+        <view class="card-title">选择素食食材<text class="card-hint">（可多选）</text></view>
+        <view class="ingredient-grid">
+          <view
+            wx:for="{{vegetables}}"
+            wx:key="id"
+            class="ingredient-item"
+            data-name="{{item.name}}"
+            bindtap="onIngredientTap"
+          >
+            <view class="ingredient-emoji {{selectedMap[item.name] ? 'ingredient-emoji-active' : ''}}">{{item.emoji}}</view>
+            <text class="ingredient-name {{selectedMap[item.name] ? 'ingredient-name-active' : ''}}">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 肉食 -->
+    <view class="ingredient-section" wx:if="{{currentTab === 1}}">
+      <view class="card">
+        <view class="card-title">选择肉食食材<text class="card-hint">（可多选）</text></view>
+        <view class="ingredient-grid">
+          <view
+            wx:for="{{meats}}"
+            wx:key="id"
+            class="ingredient-item"
+            data-name="{{item.name}}"
+            bindtap="onIngredientTap"
+          >
+            <view class="ingredient-emoji {{selectedMap[item.name] ? 'ingredient-emoji-active' : ''}}">{{item.emoji}}</view>
+            <text class="ingredient-name {{selectedMap[item.name] ? 'ingredient-name-active' : ''}}">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 面/谷物/水果 -->
+    <view class="ingredient-section" wx:if="{{currentTab === 2}}">
+      <view class="card">
+        <view class="card-title">选择面/谷物/水果<text class="card-hint">（可多选）</text></view>
+        <view class="ingredient-grid">
+          <view
+            wx:for="{{grainsFruits}}"
+            wx:key="id"
+            class="ingredient-item"
+            data-name="{{item.name}}"
+            bindtap="onIngredientTap"
+          >
+            <view class="ingredient-emoji {{selectedMap[item.name] ? 'ingredient-emoji-active' : ''}}">{{item.emoji}}</view>
+            <text class="ingredient-name {{selectedMap[item.name] ? 'ingredient-name-active' : ''}}">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 烹饪方式 -->
+    <view class="card">
+      <view class="card-title">选择烹饪方式<text class="card-hint">（可选一种）</text></view>
+      <view class="method-grid">
+        <view
+          wx:for="{{cookingMethods}}"
+          wx:key="id"
+          class="method-item {{selectedMethod === item.name ? 'method-active' : ''}}"
+          data-name="{{item.name}}"
+          bindtap="onMethodTap"
+        >
+          <text class="method-emoji">{{item.emoji}}</text>
+          <text class="method-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 菜系选择 -->
+    <view class="card">
+      <view class="card-title">选择菜系<text class="card-hint">（可选）</text></view>
+      <view class="cuisine-grid">
+        <view
+          wx:for="{{cuisines}}"
+          wx:key="*this"
+          class="cuisine-item {{selectedCuisine === item ? 'cuisine-active' : ''}}"
+          data-cuisine="{{item}}"
+          bindtap="onCuisineTap"
+        >{{item}}</view>
+      </view>
+    </view>
+
+    <!-- 搜索按钮 -->
+    <view class="search-btn-wrap">
+      <view class="btn-primary search-btn ai-search-btn" bindtap="onAISearch">
+        {{isSearching ? '🤖 AI分析中...' : '🔍 开始AI检索'}}
+      </view>
+    </view>
+
+    <!-- 搜索结果 -->
+    <view class="result-section" wx:if="{{searchResult}}">
+      <view class="result-header">
+        <text class="result-icon">{{searchResult.type === 'found' ? '📚' : '✨'}}</text>
+        <text class="result-title">{{searchResult.type === 'found' ? '数据库匹配' : 'AI创想食谱'}}</text>
+      </view>
+      <text class="result-message">{{searchResult.message}}</text>
+
+      <!-- 找到已有食谱 -->
+      <block wx:if="{{searchResult.type === 'found'}}">
+        <view class="matched-list">
+          <view
+            class="matched-card"
+            wx:for="{{searchResult.matchedRecipes}}"
+            wx:key="id"
+            bindtap="onRecipeTap"
+            data-id="{{item.id}}"
+          >
+            <text class="matched-emoji">{{item.cookingMethod === '炒' ? '🍳' : item.cookingMethod === '蒸' ? '♨️' : item.cookingMethod === '煮' ? '🫕' : item.cookingMethod === '烤' ? '🔥' : item.cookingMethod === '炸' ? '🍟' : item.cookingMethod === '炖' ? '🍲' : '🥘'}}</text>
+            <view class="matched-info">
+              <text class="matched-name">{{item.name}}</text>
+              <text class="matched-meta">{{item.cuisine}} · {{item.difficulty}}</text>
+            </view>
+            <text class="matched-arrow">›</text>
+          </view>
+        </view>
+        <view class="more-btn" bindtap="onSearchMore" wx:if="{{searchResult.allCount > 3}}">
+          查看全部 {{searchResult.allCount}} 道食谱 ›
+        </view>
+      </block>
+
+      <!-- AI生成新食谱 -->
+      <block wx:if="{{searchResult.type === 'generated'}}">
+        <view class="ai-recipe-card">
+          <view class="ai-recipe-header">
+            <text class="ai-recipe-name">{{searchResult.aiRecipe.name}}</text>
+            <view class="ai-badge">🤖 AI</view>
+          </view>
+          <view class="ai-recipe-reason">{{searchResult.aiRecipe.reason}}</view>
+          <view class="ai-recipe-tags">
+            <text class="ai-tag">{{searchResult.aiRecipe.cuisine}}</text>
+            <text class="ai-tag">{{searchResult.aiRecipe.cookingMethod}}</text>
+            <text class="ai-tag">{{searchResult.aiRecipe.difficulty}}</text>
+            <text class="ai-tag">{{searchResult.aiRecipe.time}}</text>
+          </view>
+          <view class="ai-recipe-section">
+            <text class="section-label">📦 食材</text>
+            <text class="section-value">{{searchResult.aiRecipe.ingredients.join('、')}}</text>
+          </view>
+          <view class="ai-recipe-section">
+            <text class="section-label">👨‍🍳 步骤</text>
+            <text class="section-value">{{searchResult.aiRecipe.steps.join('\n')}}</text>
+          </view>
+          <view class="ai-recipe-section">
+            <text class="section-label">💡 注意事项</text>
+            <text class="section-value">{{searchResult.aiRecipe.tips}}</text>
+          </view>
+          <view class="ai-recipe-actions">
+            <view class="action-btn add-btn" bindtap="onShowSaveModal">💾 添加到数据库</view>
+            <view class="action-btn share-btn" bindtap="onShareToCommunity">📤 分享到社区</view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 保存弹窗 -->
+    <view class="modal-mask" wx:if="{{showSaveModal}}" bindtap="onCloseSaveModal">
+      <view class="modal-content" catchtap="">
+        <view class="modal-header">
+          <text class="modal-title">💾 添加到数据库</text>
+          <text class="modal-close" bindtap="onCloseSaveModal">✕</text>
+        </view>
+        <view class="modal-body">
+          <text class="save-desc">将此AI创想食谱保存到您的个人数据库中，方便日后查看和使用。</text>
+          <view class="save-info" wx:if="{{searchResult && searchResult.aiRecipe}}">
+            <text class="save-name">{{searchResult.aiRecipe.name}}</text>
+            <text class="save-meta">{{searchResult.aiRecipe.ingredients.join('、')}}</text>
+          </view>
+          <view class="submit-btn" bindtap="onAddToDatabase">确认添加</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
